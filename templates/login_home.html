@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <link href="./css/main.css" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
   <title>Home</title>
-</html>
-<body>
-  <div class="login_banner"></div>
-  <span class="beepm_title">BEEPM</span>
-  <button class="login_title">Login</button>
-  <span class="prediction_title">Make Prediction</span>
-  <div>
 
-      <input class="email_input" placeholder="Email" type="text" id="email_input" name="email_input"><br>
-      <input class="username_input" placeholder="Username" type="text" id="username_input" name="username_input"><br>
-      <input class="pass_input" placeholder="Password" type="text" id="pass_input" name="pass_input"><br>
-  </div>
-  <div>
-      <input class="submit_login" type="submit" value="Login">
-      <input class="create_user" type="submit" value="Create Account">
-  </div>
-</body>
+  <head>
+      <div class="login_banner"></div>
+        <span class="beepm_title">BEEPM</span>
+        <button class="login_title">Login</button>
+        <span class="prediction_title">Login</span>
+  </head>
+
+  <body>
+    <form method="post" action="/login">
+      <div>
+        <input class="email_input" placeholder="Email" type="text" id="email_input" name="email_input"><br>
+        <input class="username_input" placeholder="Username" type="text" id="username_input" name="username_input"><br>
+        <input class="pass_input" placeholder="Password" type="text" id="pass_input" name="pass_input"><br>
+      </div>
+      <div>
+        <input class="submit_login" type="submit" onclick="location.href='{{ url_for('login') }}'" value="Login">
+        <input class="create_user" type="submit" value="Create Account">
+      </div>
+    </form>
+    <div>
+      <p class="error_text_login_title"> Error: </p>
+      {{ error }}
+    </div>
+
+  </body>
+</html>
