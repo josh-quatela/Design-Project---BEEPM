@@ -58,6 +58,45 @@ body {
   opacity: 1;
   text-align: left;
 }
+.logout_title {
+  width: 200px;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 55px;
+  left: 1300px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+
+.preds_title {
+  width: 200px;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 55px;
+  left: 900px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+
+.buildings_title {
+  width: 200px;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 55px;
+  left: 1100px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+
 .prediction_title {
   width: 100%;
   color: rgba(0,0,0,1);
@@ -88,6 +127,64 @@ body {
   opacity: 1;
   text-align: center;
 }
+
+.submit_login {
+  width: 322px;
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 690px;
+  left: 703px;
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 40px;
+  opacity: 1;
+  text-align: center;
+}
+
+.create_user {
+  width: 322px;
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 750px;
+  left: 703px;
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 40px;
+  opacity: 1;
+  text-align: center;
+}
+
+.submit_query{
+  width: 322px;
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 600px;
+  left: 703px;
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 40px;
+  opacity: 1;
+  text-align: center;
+}
+
 .v1_48 {
   width: 322px;
   height: 56px;
@@ -131,7 +228,39 @@ body {
   opacity: 1;
   text-align: left;
 }
+.email_input {
+  width: 569px;
+  height: 45px;
+  background: rgba(217,217,217,1);
+  opacity: 1;
+  position: absolute;
+  top: 526px;
+  left: 586px;
+  border: 3px solid rgba(0,0,0,1);
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
 .occupancy_input {
+  width: 569px;
+  height: 45px;
+  background: rgba(217,217,217,1);
+  opacity: 1;
+  position: absolute;
+  top: 442px;
+  left: 586px;
+  border: 3px solid rgba(0,0,0,1);
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+.username_input {
   width: 569px;
   height: 45px;
   background: rgba(217,217,217,1);
@@ -170,6 +299,22 @@ body {
   opacity: 1;
   position: absolute;
   top: 692px;
+  left: 586px;
+  border: 3px solid rgba(0,0,0,1);
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+.pass_input {
+  width: 569px;
+  height: 45px;
+  background: rgba(217,217,217,1);
+  opacity: 1;
+  position: absolute;
+  top: 608px;
   left: 586px;
   border: 3px solid rgba(0,0,0,1);
   overflow: hidden;
