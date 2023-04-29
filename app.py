@@ -1,6 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for
+import bson
+
+from flask import current_app, g
+from werkzeug.local import LocalProxy
+import pymongo
+from pymongo.errors import DuplicateKeyError, OperationFailure
+from bson.objectid import ObjectId
+from bson.errors import InvalidId
+
 
 app = Flask(__name__)
+
+app.config['MONGODB_SETTINGS'] = {
+    'db': 'beepm1',
+    'host': 'mongodb+srv://beepmrw:Beepm@beepm1.21uirez.mongodb.net/'
+}
 
 # Sample user data
 users = [
