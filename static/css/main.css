@@ -60,15 +60,21 @@ body {
 }
 .logout_title {
   width: 200px;
-  color: rgba(0,0,0,1);
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
   position: absolute;
   top: 55px;
   left: 1300px;
+  overflow: hidden;
   font-family: Hind;
   font-weight: SemiBold;
-  font-size: 35px;
+  font-size: 40px;
   opacity: 1;
-  text-align: left;
+  text-align: center;
 }
 
 .preds_title {
@@ -323,4 +329,41 @@ body {
   font-size: 35px;
   opacity: 1;
   text-align: left;
+}
+
+.error_text_login {
+  width: 100%;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 298px;
+  left: 100px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 55px;
+  opacity: 1;
+  text-align: center;
+}
+
+.error_text_login_title {
+  width: 100%;
+  color: rgba(255,0,0,1);
+  position: absolute;
+  top: 800px;
+  left: 100px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 30px;
+  opacity: 1;
+  text-align: center;
+}
+
+.error-container {
+  position: absolute;
+  top: 775px;
+  left: 703px;
+}
+
+.error-text {
+  color: red;
+  font-weight: bold;
 }

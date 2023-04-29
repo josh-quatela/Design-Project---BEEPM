@@ -43,6 +43,7 @@ def login():
 
         # User is not authenticated, show error message
         error = 'Invalid credentials. Please try again.'
+        print(error)
         return render_template('login_home.html', error=error)
 
     return render_template('home_logged_in.html')
@@ -50,7 +51,6 @@ def login():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    print("GOT HERE")
     return render_template('home.html')
 
 
