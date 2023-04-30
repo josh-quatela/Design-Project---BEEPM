@@ -7,6 +7,7 @@ import pymongo
 from pymongo.errors import DuplicateKeyError, OperationFailure
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
+import certifi
 
 
 app = Flask(__name__)
@@ -15,6 +16,17 @@ app.config['MONGODB_SETTINGS'] = {
     'db': 'beepm1',
     'host': 'mongodb+srv://beepmrw:Beepm@beepm1.21uirez.mongodb.net/'
 }
+
+client = pymongo.MongoClient(
+    "mongodb+srv://beepmrw:Beepm@beepm1.21uirez.mongodb.net/test?retryWrites=true&w=majority&ssl=true", 
+    tlsCAFile=certifi.where())
+client.admin.command('ping')
+print("Pinged your deployment. You successfully connected to MongoDB!")
+    
+connected_db = client.beepm_data
+login_data = connected_db["logins"]
+ll84_data = connected_db["ll84"]
+predictions_data = connected_db["predictions"]
 
 # Sample user data
 users = [
@@ -49,17 +61,33 @@ def login():
         print("PASS: ", password)
         print("EMAIL: ", email)
 
-        # Check if the user is in the user list
-        for user in users:
-            if user['username'] == username and user['password'] == password and user['email'] == email:
-                # User is authenticated, redirect to the home page
+        action = "login" #change based on html/css, just not familiar enough with how it's laid out to do this myself
+        if action == "login": #trying existing login
+            # Check if the user is in the user list
+            returned = login_data.find_one( {
+                "email": email,
+                "username": username,
+                "password": password
+            } )
+            if returned:
                 return redirect(url_for('home'))
-
+            # User is not authenticated, show error message
+            error = 'Invalid credentials. Please try again.'
+            print(error)
+            return render_template('login_home.html', error=error)
+        else: #creating a new user
+            returned = login_data.find_one( {
+            "email": email,
+            "username": username
+        } )
+        if returned:
+            error = 'Account already exists.'
+            print(error)
+            return render_template('login_home.html', error=error)
         # User is not authenticated, show error message
-        error = 'Invalid credentials. Please try again.'
-        print(error)
-        return render_template('login_home.html', error=error)
-
+        print(login_data.insert_one({"email": email, "username": username, "password": password}))
+        return redirect(url_for('home'))
+    
     return render_template('home_logged_in.html')
 
 
