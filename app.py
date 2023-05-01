@@ -96,6 +96,32 @@ def logout():
     return render_template('home.html')
 
 
+@app.route('/my_predictions', methods=['GET', 'POST'])
+def my_predictions():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        predictions = predictions_data.find({
+            "email": session.get('email'),
+            "username": session.get('username')
+        })
+        #should be able to use predictions as the data to put into the html table, just not sure where that html page is
+    else:
+        return render_template('login_home.html', error="Please login first.")
+    
+
+@app.route('/my_buildings', methods=['GET', 'POST'])
+def my_buildings():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        buildings = ll84_data.find({
+            "email": session.get('email'),
+            "username": session.get('username')
+        })
+        #should be able to use buildings as the data to put into the html table, just not sure where that html page is
+    else:
+        return render_template('login_home.html', error="Please login first.")
+
+
 @app.route('/home')
 def home():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
