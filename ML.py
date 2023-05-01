@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[11]:
-
-
 import math
 import statistics
 import certifi
@@ -100,6 +94,7 @@ def predict_data(dataframe, regression, percent_outlier, y):
         # outliers... unless?
         if error < percent_outlier:
             errors.append(error)
+
 #             print('PREDICTED GHG EMISSIONS:', predEm)
 #             print('ACTUAL GHG EMISSIONS:', y[index][0])
 #             print('ABS PERCENT ERROR:', error, '%')
@@ -112,7 +107,7 @@ def predict_data(dataframe, regression, percent_outlier, y):
     return dataframe, expected, actual
 
 
-def find_corresponding_letter(val):
+def find_letter_grade(val):
     if val < 1:
         return 'F'
     elif val < 1.33:
@@ -139,7 +134,7 @@ def find_corresponding_letter(val):
         return 'A+'
     
 
-def find_letter_grade(pred_score, avg_score, deviation):
+def evaluate(pred_score, avg_score, deviation):
     """
     returns letter grade for pred_score
     """
@@ -159,18 +154,18 @@ def find_letter_grade(pred_score, avg_score, deviation):
             pred_score += deviation
             ret += lcount
             increment /= 2
-         
-    return find_corresponding_letter(ret)
+        
+    return ret
 
 
-def make_prediction(building_type, occupation, num_buildings, area):
+def get_prediction(building_type, occupation, num_buildings, area):
     """
     makes prediction based on parameters;
     returns letter grade for proposed building
     """
     variables = ['Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use']
     df = get_mongo_dataframe()
-    grades = list()
+    grades, vals, averages = list(), list(), list()
     
     for v in variables:
         cols = [var for var in variables if var != v]
@@ -190,11 +185,39 @@ def make_prediction(building_type, occupation, num_buildings, area):
             predEm = regression.predict(prediction)[0]
             predEm = math.e ** predEm
             
-            grades.append(find_letter_grade(math.log(predEm), sum([math.log(a) for a in actual]) / len(actual),
+            grades.append(evaluate(math.log(predEm), sum([math.log(a) for a in actual]) / len(actual),
                     statistics.stdev([math.log(a) for a in actual])))
+            averages.append(math.e ** (sum([math.log(a) for a in actual]) / len(actual)))
+            vals.append(predEm)
 
         except Exception as e:
             print(e)
             raise(e)
         
-    return grades
+    return find_letter_grade(sum(grades) / len(grades)), vals, averages
+
+
+def get_analysis(prediction):
+    """
+    simple assessment of prediction;
+    to be displayed to frontend
+    """
+    ret = list()
+    ret.append('The building scores ' + prediction[0] + ' ')
+    
+    emissionsCompare = prediction[1][0] / prediction[2][0]
+    if emissionsCompare < 1:
+        ret.append('GHS emissions rate is ' + str(abs(round(1 - emissionsCompare * 100))) + \
+            ' percent less than the average for its building type')
+    else:
+        ret.append('GHS emissions rate is ' + str(abs(round(1 - emissionsCompare * 100))) + \
+            ' percent more than the average for its building type')
+    
+    electricCompare = prediction[1][1] / prediction[2][1]
+    if electricCompare < 1:
+        ret.append('Electricity usage is ' + str(abs(round(1 - electricCompare * 100))) + \
+        ' percent less than the average for its building type')
+    else:
+        ret.append('Electricity usage is ' + str(abs(round(1 - electricCompare * 100))) + \
+            ' percent more than the average for its building type')
+    return ret
