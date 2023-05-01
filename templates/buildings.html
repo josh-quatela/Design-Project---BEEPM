@@ -15,10 +15,13 @@
   <form method="get" action="/logout">
     <button class="login_title" type="submit">Logout</button>
   </form>
-  <span class="prediction_title">Make Prediction</span>
-  <div>
-    <form method="get" action="/make_prediction">
-      <input class="submit" type="submit" value="Make Prediction">
-    </form>
+  <span class="prediction_title">Saved Buildings</span>
+  <div class="table">
+		<h1>Data Table</h1>
+		{% if table %}
+			{{ table|safe }}
+		{% else %}
+			<p>No data available</p>
+		{% endif %}
   </div>
 </body>

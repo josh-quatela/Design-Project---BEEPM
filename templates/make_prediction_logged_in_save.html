@@ -6,30 +6,28 @@
 
     <div class="login_banner"></div>
     <span class="beepm_title">BEEPM</span>
-    <form method="get" action="/buildings">
-        <button class="buildings_title" type="submit">Buildings</button>
-    </form>
-    <form method="get" action="/predictions">
-        <button class="preds_title" type="submit">Predictions</button>
-    </form>
+    <button class="buildings_title">My Buildings</button>
+    <button class="preds_title">My Predictions</button>
     <form method="get" action="/logout">
         <button class="login_title" type="submit">Logout</button>
     </form>
     <span class="prediction_title">Make Prediction</span>
-    <form method="post">
+    <form method="post" action="/predict">
         <div>
             <input class="area_input" placeholder="Area (Square Feet)" type="text" id="area_input" name="area_input"><br>
             <input class="occupancy_input" placeholder="Occupancy" type="text" id="occupancy_input" name="occupancy_input"><br>
             <input class="windows_input" placeholder="Number of Buildings" type="text" id="windows_input" name="windows_input"><br>
             <input class="height_input" placeholder="Building Type" type="text" id="height_input" name="height_input"><br>
         </div>
-        <input class="submit" type="submit" formaction="/predict" name="make_prediction" onclick="location.href='{{ url_for('predict') }}'" value="Submit">
-        <input class="save_prediction" type="submit" formaction="/save_prediction" name="save_pred" onclick="location.href='{{ url_for('save_prediction') }}'" value="Save">
-
+        <div>
+            <input class="submit_prediction" type="submit" name="make_prediction" onclick="location.href='{{ url_for('predict') }}'" value="Submit">
+        </div>
     </form>
-
     <div>
       <p class="error_text_login_title">{{ prediction }}</p>
+    </div>
+    <div>
+        <input class="save" type="submit" name="save_prediction" onclick="location.href='{{ url_for('save_prediction') }}'" value="Save Prediction">
     </div>
     </body>
 </html>

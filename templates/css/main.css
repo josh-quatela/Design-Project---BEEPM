@@ -126,6 +126,42 @@ body {
   position: absolute;
   top: 777px;
   left: 703px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 40px;
+  opacity: 1;
+  text-align: center;
+}
+
+.save_prediction {
+  width: 322px;
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 777px;
+  left: 1000px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 40px;
+  opacity: 1;
+  text-align: center;
+}
+
+.submit_prediction {
+  width: 322px;
+  height: 56px;
+  background: url("../images/v1_47.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 777px;
+  left: 703px;
   overflow: hidden;
   font-family: Hind;
   font-weight: SemiBold;
@@ -366,4 +402,25 @@ body {
 .error-text {
   color: red;
   font-weight: bold;
+}
+
+.table {
+  visibility: visible;
+  display: block;
+  width: 100%;
+  color: rgba(0,0,0,1);
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 55px;
+  opacity: 1;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  top: 10000px;
+  left: 10000px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-x: auto;
+  z-index: 1000;
 }
