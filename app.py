@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import bson
 
 from flask import current_app, g
@@ -28,12 +28,6 @@ login_data = connected_db["logins"]
 ll84_data = connected_db["ll84"]
 predictions_data = connected_db["predictions"]
 
-# Sample user data
-users = [
-    {'username': 'user1', 'email': 'email1', 'password': 'pass1'},
-    {'username': 'user2', 'email': 'email2', 'password': 'pass2'},
-    {'username': 'user3', 'email': 'email3', 'password': 'pass3'}
-]
 
 
 @app.route('/')
@@ -61,8 +55,9 @@ def login():
         print("PASS: ", password)
         print("EMAIL: ", email)
 
-        action = "login" #change based on html/css, just not familiar enough with how it's laid out to do this myself
-        if action == "login": #trying existing login
+        #change based on html/css, just not familiar enough with how it's laid out to do this myself
+        if request.form.get('login'): #trying existing login
+            print("checking for login")
             # Check if the user is in the user list
             returned = login_data.find_one( {
                 "email": email,
@@ -70,6 +65,8 @@ def login():
                 "password": password
             } )
             if returned:
+                session['email'] = email
+                session['username'] = username
                 return redirect(url_for('home'))
             # User is not authenticated, show error message
             error = 'Invalid credentials. Please try again.'
@@ -79,27 +76,61 @@ def login():
             returned = login_data.find_one( {
             "email": email,
             "username": username
-        } )
-        if returned:
-            error = 'Account already exists.'
-            print(error)
-            return render_template('login_home.html', error=error)
+            } )
+            if returned:
+                error = 'Account already exists.'
+                print(error)
+                return render_template('login_home.html', error=error)
         # User is not authenticated, show error message
-        print(login_data.insert_one({"email": email, "username": username, "password": password}))
-        return redirect(url_for('home'))
+            print(login_data.insert_one({"email": email, "username": username, "password": password}))
+            session['email'] = email
+            session['username'] = username
+            return redirect(url_for('home'))
     
     return render_template('home_logged_in.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
+    session.clear()
     return render_template('home.html')
+
+
+@app.route('/my_predictions', methods=['GET', 'POST'])
+def my_predictions():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        predictions = predictions_data.find({
+            "email": session.get('email'),
+            "username": session.get('username')
+        })
+        #should be able to use predictions as the data to put into the html table, just not sure where that html page is
+    else:
+        return render_template('login_home.html', error="Please login first.")
+    
+
+@app.route('/my_buildings', methods=['GET', 'POST'])
+def my_buildings():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        buildings = ll84_data.find({
+            "email": session.get('email'),
+            "username": session.get('username')
+        })
+        #should be able to use buildings as the data to put into the html table, just not sure where that html page is
+    else:
+        return render_template('login_home.html', error="Please login first.")
 
 
 @app.route('/home')
 def home():
-    return render_template('home_logged_in.html')
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        return render_template('home_logged_in.html')
+    else:
+        return render_template('login_home.html', error="Please login first.")
 
 
+app.secret_key = 'very secret'
 if __name__ == '__main__':
     app.run('127.0.0.1', 5000, debug=True)

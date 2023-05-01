@@ -18,8 +18,8 @@
         <input class="pass_input" placeholder="Password" type="text" id="pass_input" name="pass_input"><br>
       </div>
       <div>
-        <input class="submit_login" type="submit" onclick="location.href='{{ url_for('login') }}'" value="Login">
-        <input class="create_user" type="submit" value="Create Account">
+        <input class="submit_login" type="submit" name="login" onclick="location.href='{{ url_for('login') }}'" value="Login">
+        <input class="create_user" type="submit" name="create_user" onclick="location.href='{{ url_for('login') }}'" value="Create Account">
       </div>
     </form>
     <div>
