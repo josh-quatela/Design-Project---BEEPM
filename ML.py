@@ -190,7 +190,7 @@ def get_analysis(prediction):
     ret.append('The building scores ' + prediction[0] + ' ')
     
     emissionsCompare = prediction[1][0] / prediction[2][0]
-    if emissionsCompare < 1:
+    if emissionsCompare < 0:
         ret.append('GHS emissions rate is ' + str(abs(round(1 - emissionsCompare * 100))) + \
             ' percent less than the average for its building type')
     else:
@@ -198,7 +198,7 @@ def get_analysis(prediction):
             ' percent more than the average for its building type')
     
     electricCompare = prediction[1][1] / prediction[2][1]
-    if electricCompare < 1:
+    if electricCompare < 0:
         ret.append('Electricity usage is ' + str(abs(round(1 - electricCompare * 100))) + \
         ' percent less than the average for its building type')
     else:
