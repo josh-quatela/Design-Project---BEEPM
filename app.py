@@ -61,8 +61,8 @@ def login():
         print("PASS: ", password)
         print("EMAIL: ", email)
 
-        action = "login" #change based on html/css, just not familiar enough with how it's laid out to do this myself
-        if action == "login": #trying existing login
+        #change based on html/css, just not familiar enough with how it's laid out to do this myself
+        if request.form.get('login'): #trying existing login
             # Check if the user is in the user list
             returned = login_data.find_one( {
                 "email": email,
@@ -79,14 +79,14 @@ def login():
             returned = login_data.find_one( {
             "email": email,
             "username": username
-        } )
-        if returned:
-            error = 'Account already exists.'
-            print(error)
-            return render_template('login_home.html', error=error)
+            } )
+            if returned:
+                error = 'Account already exists.'
+                print(error)
+                return render_template('login_home.html', error=error)
         # User is not authenticated, show error message
-        print(login_data.insert_one({"email": email, "username": username, "password": password}))
-        return redirect(url_for('home'))
+            print(login_data.insert_one({"email": email, "username": username, "password": password}))
+            return redirect(url_for('home'))
     
     return render_template('home_logged_in.html')
 
