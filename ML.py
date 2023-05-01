@@ -108,27 +108,28 @@ def predict_data(dataframe, regression, percent_outlier, y):
 
 
 def find_letter_grade(val):
-    if val < 1:
+    
+    if val < -1.66:
         return 'F'
-    elif val < 1.33:
+    elif val < -1.33:
         return 'D-'
-    elif val < 1.66:
+    elif val < -1:
         return 'D'
-    elif val < 2:
+    elif val < -0.66:
         return 'D+'
-    elif val < 2.33:
+    elif val < -0.33:
         return 'C-'
-    elif val < 2.66:
+    elif val < 0:
         return 'C'
-    elif val < 3:
+    elif val < 0.33:
         return 'C+'
-    elif val < 3.33:
+    elif val < 0.66:
         return 'B-'
-    elif val < 3.66:
+    elif val < 1.0:
         return 'B'
-    elif val < 4:
+    elif val < 1.33:
         return 'B+'
-    elif val < 4.33:
+    elif val < 1.66:
         return 'A'
     else:
         return 'A+'
@@ -138,24 +139,7 @@ def evaluate(pred_score, avg_score, deviation):
     """
     returns letter grade for pred_score
     """
-    ret = 2
-    rcount, lcount = 0, 0
-    increment = 1
-    if pred_score > avg_score:
-        while pred_score > avg_score:
-            rcount += increment
-            pred_score -= deviation
-            ret -= rcount
-            increment /= 2
-
-    elif pred_score < avg_score:
-        while pred_score < avg_score:
-            lcount += increment
-            pred_score += deviation
-            ret += lcount
-            increment /= 2
-        
-    return ret
+    return (avg_score - pred_score) / deviation
 
 
 def get_prediction(building_type, occupation, num_buildings, area):
