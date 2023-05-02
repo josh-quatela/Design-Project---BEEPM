@@ -57,7 +57,6 @@ def clean_dataframe(dataframe, column):
     """
     # getting rid of all rows containing np.nan - useless for training
     for column in dataframe.columns:
-        print(column)
         dataframe = dataframe[dataframe[column].notna()]
 
     # prevent division by zero in calculations
@@ -160,7 +159,8 @@ def get_prediction(building_type, occupation, num_buildings, area):
             raise BaseException('Building type DNE; choose one of ', types)
         
         try:
-            copydf = copydf[copydf['Primary Property Type - Self Selected'].str.contains(building_type.capitalize()) == True]
+            types_capitalized = ' '.join([t.capitalize() for t in building_type.split(' ')])
+            copydf = copydf[copydf['Primary Property Type - Self Selected'].str.contains(types_capitalized) == True]
             copydf = copydf.drop('Primary Property Type - Self Selected', axis=1)
             copydf, regression, y = clean_dataframe(copydf, v)
             copydf, expected, actual = predict_data(copydf, regression, 300, y)
