@@ -109,13 +109,12 @@ def predictions():
         html_data += '<tr><th>Property Name</th><th>Gross Floor Area (Sq. Feet)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Occupancy</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
         for item in predictions:
             html_data += '<tr>'
-            html_data += '<td>{item["Property Name"]}</td>'
-            html_data += '<td>{item["Self-Reported Gross Floor Area (Sq. Feet)"]}</td>'
-            html_data += '<td>{item["Largest Property Use Type"]}</td>'
-            html_data += '<td>{item["Number of Buildings"]}</td>'
-            html_data += '<td>{item["Occupancy"]}</td>'
-            html_data += '<td>{item["Total GHG Emissions (Metric Tons CO2e)"]}</td>'
-
+            html_data += '<td>' + item["Property Name"] + '</td>'
+            html_data += '<td>' + item["Self-Reported Gross Floor Area (ft²)"] + '</td>'
+            html_data += '<td>' + item["Largest Property Use Type"] + '</td>'
+            html_data += '<td>' + item["Number of Buildings"] + '</td>'
+            html_data += '<td>' + item["Occupancy"] + '</td>'
+            html_data += '<td>' + item["Total GHG Emissions (Metric Tons CO2e)"] + '</td>'
             html_data += '</tr>'
         html_data += '</table>'
 
@@ -183,7 +182,7 @@ def save_prediction():
         #save this prediction to the user's predictions
         total_emissions = pred[1][0]
         building_electricity = pred[1][1]
-        prediction_data.insert_one({"email": email, "username": username, "building_type": building_type, "occupancy_input": occupancy_input, "number_of_buildings": number_of_buildings, "area_input": area_input, "letter_grade": letter_grade, "total_emissions": total_emissions, "building_electricity": building_electricity})
+        predictions_data.insert_one({"email": session.get('email'), "username": session.get('username'), "building_type": building_type, "occupancy_input": occupancy_input, "number_of_buildings": number_of_buildings, "area_input": area_input, "letter_grade": letter_grade, "total_emissions": total_emissions, "building_electricity": building_electricity})
         prediction = "Prediction saved!" + area_input + " Sq. Feet; " + occupancy_input + " Occupancy; " + number_of_buildings + building_type + " Building"
         return render_template('make_prediction_logged_in.html', prediction=prediction)
     else:
