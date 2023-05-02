@@ -403,23 +403,14 @@ body {
   opacity: 1;
   text-align: center;
 }
-.table {
+table {
   visibility: visible;
-  display: block;
   width: 100%;
-  color: rgba(0,0,0,1);
-  font-family: Hind;
-  font-weight: SemiBold;
-  font-size: 55px;
-  opacity: 1;
+  position: relative;
+  margin-top: 160px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-  top: 10000px;
-  left: 10000px;
   border: 1px solid #ccc;
-  border-radius: 5px;
   padding: 10px;
-  overflow-x: auto;
-  z-index: 1000;
 }
