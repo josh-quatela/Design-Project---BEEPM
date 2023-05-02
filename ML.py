@@ -22,7 +22,7 @@ def get_mongo_dataframe():
 
     # creating dataframe from requested info
     columns = {'Primary Property Type - Self Selected', 'Occupancy', 'Number of Buildings',
-               'Self-Reported Gross Floor Area (ft²)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
+               'Self-Reported Gross Floor Area (Sq. Feet)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
     cursor_list = list(client.beepm_data["ll84"].find({}, columns))
     df = pd.DataFrame(cursor_list)
     df.drop('_id', axis=1, inplace=True)
@@ -47,7 +47,12 @@ def get_building_types(dataframe, minimum):
     for item in building_types:
         if building_types[item] > minimum:
             ret_types[item] = building_types[item]
+
+    return values in dict except of returning dict
     return ret_types
+
+    #type_names = list(ret_types.keys())
+    #return type_names # still returning numbers, we need the keys of dict in string format
 
 
 def clean_dataframe(dataframe, column):

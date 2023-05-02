@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 from bson.errors import InvalidId
 import certifi
 
+from ML import *
 
 app = Flask(__name__)
 
@@ -105,16 +106,15 @@ def predictions():
             "username": session.get('username')
         })
         html_data = '<table>'
-        html_data += '<tr><th>ID</th><th>Property Name</th><th>Gross Floor Area (ft²)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Occupancy</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
+        html_data += '<tr><th>Property Name</th><th>Gross Floor Area (Sq. Feet)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Occupancy</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
         for item in predictions:
             html_data += '<tr>'
-            html_data += f'<td>{item["_id"]}</td>'
-            html_data += f'<td>{item["Property Name"]}</td>'
-            html_data += f'<td>{item["Self-Reported Gross Floor Area (ft²)"]}</td>'
-            html_data += f'<td>{item["Largest Property Use Type"]}</td>'
-            html_data += f'<td>{item["Number of Buildings"]}</td>'
-            html_data += f'<td>{item["Occupancy"]}</td>'
-            html_data += f'<td>{item["Total GHG Emissions (Metric Tons CO2e)"]}</td>'
+            html_data += '<td>{item["Property Name"]}</td>'
+            html_data += '<td>{item["Self-Reported Gross Floor Area (Sq. Feet)"]}</td>'
+            html_data += '<td>{item["Largest Property Use Type"]}</td>'
+            html_data += '<td>{item["Number of Buildings"]}</td>'
+            html_data += '<td>{item["Occupancy"]}</td>'
+            html_data += '<td>{item["Total GHG Emissions (Metric Tons CO2e)"]}</td>'
 
             html_data += '</tr>'
         html_data += '</table>'
@@ -134,16 +134,15 @@ def buildings():
         })
 
         html_data = '<table>'
-        html_data += '<tr><th>ID</th><th>Property Name</th><th>Gross Floor Area (ft²)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Occupancy</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
+        html_data += '<tr><th>Property Name</th><th>Gross Floor Area (Sq. Feet)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Occupancy</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
         for item in buildings:
             html_data += '<tr>'
-            html_data += f'<td>{item["_id"]}</td>'
-            html_data += f'<td>{item["Property Name"]}</td>'
-            html_data += f'<td>{item["Self-Reported Gross Floor Area (ft²)"]}</td>'
-            html_data += f'<td>{item["Largest Property Use Type"]}</td>'
-            html_data += f'<td>{item["Number of Buildings"]}</td>'
-            html_data += f'<td>{item["Occupancy"]}</td>'
-            html_data += f'<td>{item["Total GHG Emissions (Metric Tons CO2e)"]}</td>'
+            html_data += '<td>{item["Property Name"]}</td>'
+            html_data += '<td>{item["Self-Reported Gross Floor Area (Sq. Feet)"]}</td>'
+            html_data += '<td>{item["Largest Property Use Type"]}</td>'
+            html_data += '<td>{item["Number of Buildings"]}</td>'
+            html_data += '<td>{item["Occupancy"]}</td>'
+            html_data += '<td>{item["Total GHG Emissions (Metric Tons CO2e)"]}</td>'
 
             html_data += '</tr>'
         html_data += '</table>'
@@ -176,11 +175,12 @@ def save_prediction():
     if check_logged:
         area_input = request.form["area_input"]
         occupancy_input = request.form["occupancy_input"]
-        windows_input = request.form["windows_input"]
-        height_input = request.form["height_input"]
+        number_of_buildings = request.form["windows_input"] 
+        building_type = request.form["height_input"]
         # TODO: run the actual prediction and get output to pass to template
+        letter_grade = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
         # TODO: save this prediction to the user's predictions
-        prediction = "Prediction save" + area_input + ";" + occupancy_input + ";" + windows_input + ";" + height_input
+        prediction = "Prediction saved!" + area_input + " Sq. Ft; " + occupancy_input + " Occupancy; " + number_of_buildings + building_type + " Building" 
         return render_template('make_prediction_logged_in.html', prediction=prediction)
     else:
         return render_template('login_home.html', error="Please login first.")
@@ -191,10 +191,11 @@ def predict():
     if check_logged:
         area_input = request.form["area_input"]
         occupancy_input = request.form["occupancy_input"]
-        windows_input = request.form["windows_input"]
-        height_input = request.form["height_input"]
+        number_of_buildings = request.form["windows_input"] 
+        building_type = request.form["height_input"] 
         # TODO: run the actual prediction and get output to pass to template
-        prediction = "This building sucks." +area_input+";"+occupancy_input+";"+windows_input+";"+height_input
+        letter_grade = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
+        prediction = "This building has a grade of " + letter_grade
         return render_template('make_prediction_logged_in.html', prediction=prediction)
     else:
         return render_template('login_home.html', error="Please login first.")
