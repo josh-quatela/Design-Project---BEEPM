@@ -22,7 +22,7 @@ def get_mongo_dataframe():
 
     # creating dataframe from requested info
     columns = {'Primary Property Type - Self Selected', 'Occupancy', 'Number of Buildings',
-               'Self-Reported Gross Floor Area (Sq. Feet)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
+               'Self-Reported Gross Floor Area (ft²)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
     cursor_list = list(client.beepm_data["ll84"].find({}, columns))
     df = pd.DataFrame(cursor_list)
     df.drop('_id', axis=1, inplace=True)
@@ -32,13 +32,12 @@ def get_mongo_dataframe():
 def get_building_types(dataframe, minimum):
     """
     gets building types from dataframe with at least
-    minimum number of instances.
-    type of building assumed to be at column [1] of dataframe
+    minimum number of instances
     """
     # counting each type of building in df
     building_types, ret_types = dict(), dict()
     for index in range(len(dataframe)):
-        if dataframe.iloc[index][1] in building_types:
+        if dataframe['Primary Property Type - Self Selected'][index] in building_types:
             building_types[dataframe.iloc[index][1]] += 1
         else:
             building_types[dataframe.iloc[index][1]] = 1
@@ -47,12 +46,7 @@ def get_building_types(dataframe, minimum):
     for item in building_types:
         if building_types[item] > minimum:
             ret_types[item] = building_types[item]
-
-    # return values in dict except of returning dict
     return ret_types
-
-    #type_names = list(ret_types.keys())
-    #return type_names # still returning numbers, we need the keys of dict in string format
 
 
 def clean_dataframe(dataframe, column):
@@ -114,27 +108,27 @@ def predict_data(dataframe, regression, percent_outlier, y):
 
 def find_letter_grade(val):
     
-    if val < -1.66:
+    if val < -1:
         return 'F'
-    elif val < -1.33:
-        return 'D-'
-    elif val < -1:
-        return 'D'
     elif val < -0.66:
-        return 'D+'
+        return 'D-'
     elif val < -0.33:
-        return 'C-'
+        return 'D'
     elif val < 0:
-        return 'C'
+        return 'D+'
     elif val < 0.33:
-        return 'C+'
+        return 'C-'
     elif val < 0.66:
-        return 'B-'
-    elif val < 1.0:
-        return 'B'
+        return 'C'
+    elif val < 1:
+        return 'C+'
     elif val < 1.33:
-        return 'B+'
+        return 'B-'
     elif val < 1.66:
+        return 'B'
+    elif val < 2:
+        return 'B+'
+    elif val < 2.33:
         return 'A'
     else:
         return 'A+'
