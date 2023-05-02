@@ -198,7 +198,8 @@ def predict():
         number_of_buildings = request.form["windows_input"] 
         building_type = request.form["height_input"] 
         #run the actual prediction and get output to pass to template
-        pred = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
+        pred = get_prediction(building_type, int(occupancy_input), int(number_of_buildings), int(area_input))
+        print(pred)
         #letter_grade = pred[0]
         #prediction = "This building has a grade of " + letter_grade
         str_output = get_analysis(pred)

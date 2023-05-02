@@ -22,7 +22,7 @@ def get_mongo_dataframe():
 
     # creating dataframe from requested info
     columns = {'Primary Property Type - Self Selected', 'Occupancy', 'Number of Buildings',
-               'Self-Reported Gross Floor Area (Sq. Feet)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
+               'Self-Reported Gross Floor Area (ft²)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
     cursor_list = list(client.beepm_data["ll84"].find({}, columns))
     df = pd.DataFrame(cursor_list)
     df.drop('_id', axis=1, inplace=True)
@@ -37,10 +37,10 @@ def get_building_types(dataframe, minimum):
     # counting each type of building in df
     building_types, ret_types = dict(), dict()
     for index in range(len(dataframe)):
-        if dataframe['Primary Property Type - Self Selected'][index] in building_types:
-            building_types[dataframe.iloc[index][1]] += 1
+        if dataframe['Primary Property Type - Self Selected'][index].lower() in building_types:
+            building_types[dataframe.iloc[index][1].lower()] += 1
         else:
-            building_types[dataframe.iloc[index][1]] = 1
+            building_types[dataframe.iloc[index][1].lower()] = 1
     
     # returning those with minimum number of entries
     for item in building_types:
@@ -57,6 +57,7 @@ def clean_dataframe(dataframe, column):
     """
     # getting rid of all rows containing np.nan - useless for training
     for column in dataframe.columns:
+        print(column)
         dataframe = dataframe[dataframe[column].notna()]
 
     # prevent division by zero in calculations
@@ -155,11 +156,11 @@ def get_prediction(building_type, occupation, num_buildings, area):
         copydf = df.drop(cols, axis=1)
 
         types = get_building_types(copydf, 1000)
-        if building_type not in types:
+        if building_type.lower() not in types:
             raise BaseException('Building type DNE; choose one of ', types)
         
         try:
-            copydf = copydf[copydf['Primary Property Type - Self Selected'].str.contains(building_type) == True]
+            copydf = copydf[copydf['Primary Property Type - Self Selected'].str.contains(building_type.capitalize()) == True]
             copydf = copydf.drop('Primary Property Type - Self Selected', axis=1)
             copydf, regression, y = clean_dataframe(copydf, v)
             copydf, expected, actual = predict_data(copydf, regression, 300, y)
