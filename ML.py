@@ -48,7 +48,7 @@ def get_building_types(dataframe, minimum):
         if building_types[item] > minimum:
             ret_types[item] = building_types[item]
 
-    return values in dict except of returning dict
+    # return values in dict except of returning dict
     return ret_types
 
     #type_names = list(ret_types.keys())
