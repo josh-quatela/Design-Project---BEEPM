@@ -177,10 +177,14 @@ def save_prediction():
         occupancy_input = request.form["occupancy_input"]
         number_of_buildings = request.form["windows_input"] 
         building_type = request.form["height_input"]
-        # TODO: run the actual prediction and get output to pass to template
-        letter_grade = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
-        # TODO: save this prediction to the user's predictions
-        prediction = "Prediction saved!" + area_input + " Sq. Ft; " + occupancy_input + " Occupancy; " + number_of_buildings + building_type + " Building" 
+        #run the actual prediction and get output to pass to template
+        pred = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
+        letter_grade = pred[0]
+        #save this prediction to the user's predictions
+        total_emissions = pred[1][0]
+        building_electricity = pred[1][1]
+        prediction_data.insert_one({"email": email, "username": username, "building_type": building_type, "occupancy_input": occupancy_input, "number_of_buildings": number_of_buildings, "area_input": area_input, "letter_grade": letter_grade, "total_emissions": total_emissions, "building_electricity": building_electricity})
+        prediction = "Prediction saved!" + area_input + " Sq. Feet; " + occupancy_input + " Occupancy; " + number_of_buildings + building_type + " Building"
         return render_template('make_prediction_logged_in.html', prediction=prediction)
     else:
         return render_template('login_home.html', error="Please login first.")
@@ -193,9 +197,13 @@ def predict():
         occupancy_input = request.form["occupancy_input"]
         number_of_buildings = request.form["windows_input"] 
         building_type = request.form["height_input"] 
-        # TODO: run the actual prediction and get output to pass to template
-        letter_grade = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
-        prediction = "This building has a grade of " + letter_grade
+        #run the actual prediction and get output to pass to template
+        pred = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
+        #letter_grade = pred[0]
+        #prediction = "This building has a grade of " + letter_grade
+        str_output = get_analysis(pred)
+        prediction = str_output
+        
         return render_template('make_prediction_logged_in.html', prediction=prediction)
     else:
         return render_template('login_home.html', error="Please login first.")
