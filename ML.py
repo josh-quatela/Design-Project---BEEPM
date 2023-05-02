@@ -22,7 +22,7 @@ def get_mongo_dataframe():
 
     # creating dataframe from requested info
     columns = {'Primary Property Type - Self Selected', 'Occupancy', 'Number of Buildings',
-               'Self-Reported Gross Floor Area (ft²)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
+               'Self-Reported Gross Floor Area (Sq. Feet)', 'Total GHG Emissions (Metric Tons CO2e)', 'Electricity Use'}
     cursor_list = list(client.beepm_data["ll84"].find({}, columns))
     df = pd.DataFrame(cursor_list)
     df.drop('_id', axis=1, inplace=True)
