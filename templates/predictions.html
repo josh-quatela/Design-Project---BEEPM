@@ -8,6 +8,9 @@
       <form method="get" action="/buildings">
         <button class="buildings_title" type="submit">Buildings</button>
       </form>
+      <form method="get" action="/home">
+        <button class="home_title" type="submit">Home</button>
+      </form>
       <form method="get" action="/predictions">
         <button class="preds_title" type="submit">Predictions</button>
       </form>
@@ -22,5 +25,19 @@
             <p>No data available</p>
           {% endif %}
       </div>
+      <script>
+          function postData(rowId) {
+          var row = document.getElementById(rowId);
+          var col1 = row.cells[0].innerText;
+          var col2 = row.cells[1].innerText;
+          var col3 = row.cells[2].innerText;
+
+    // Construct the POST request
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/table-post');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send('col1=' + col1 + '&col2=' + col2 + '&col3=' + col3);
+}
+</script>
     </body>
 </html>
