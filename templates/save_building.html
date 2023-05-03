@@ -36,6 +36,7 @@
             <p>Letter Grade: {{ letter_grade }}</p>
             <p>Total Emissions: {{ total_emissions }}</p>
             <p>Building Electricity: {{ building_electricity }}</p>
+            <p>Occupancy: {{ occupancy }}</p>
             <input class="name_input" placeholder="Building Name" type="text" id="building_name" name="building_name"><br>
         </div>
         <input class="submit" type="submit" formaction="/save" name="save" onclick="location.href='{{ url_for('save') }}'" value="Save Building">
