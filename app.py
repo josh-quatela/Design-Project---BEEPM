@@ -198,6 +198,42 @@ def buildings():
         return render_template('login_home.html', error="Please login first.")
 
 
+@app.route('/view_database', methods=['GET', 'POST'])
+def view_database():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+
+        html_data = '<table>'
+        html_data += '<tr><th>Property Name</th><th>Gross Floor Area (Sq. Feet)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
+        for item in ll84_data.find():
+            try:
+                html_data += f'''<tr>
+                                <td id="prop_name" name="prop_name">{str(item["Property Name"])}</td>
+                                <td id="area_input" name="area_input">{str(item["Self-Reported Gross Floor Area (ft²)"])}</td>
+                                <td id="building_type" name="building_type">{str(item["Largest Property Use Type"])}</td>
+                                <td id="number_of_buildings" name="number_of_buildings">{str(item["Number of Buildings"])}</td>
+                                <td id="total_emissions" name="total_emissions">{str(item["Total GHG Emissions (Metric Tons CO2e)"])}</td>
+                        </tr>'''
+            except:
+                continue
+
+            '''
+            html_data += '<tr>'
+            html_data += '<td>' + item["Property Name"] + '</td>'
+            html_data += '<td>' + item["Self-Reported Gross Floor Area (ft²)"] + '</td>'
+            html_data += '<td>' + item["Largest Property Use Type"] + '</td>'
+            html_data += '<td>' + item["Number of Buildings"] + '</td>'
+            html_data += '<td>' + item["Total GHG Emissions (Metric Tons CO2e)"] + '</td>'
+            html_data += '</tr>'
+            '''
+
+        html_data += '</table>'
+
+        return render_template("buildings.html", table=html_data)
+    else:
+        return render_template('login_home.html', error="Please login first.")
+
+
 @app.route('/home')
 def home():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
