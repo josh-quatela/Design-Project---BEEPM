@@ -37,6 +37,8 @@ def get_building_types(dataframe, minimum):
     # counting each type of building in df
     building_types, ret_types = dict(), dict()
     for index in range(len(dataframe)):
+        if type(dataframe['Primary Property Type - Self Selected'][index]) == float:
+            continue
         if dataframe['Primary Property Type - Self Selected'][index].lower() in building_types:
             building_types[dataframe.iloc[index][1].lower()] += 1
         else:
