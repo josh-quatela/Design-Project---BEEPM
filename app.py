@@ -202,7 +202,7 @@ def save_prediction():
         number_of_buildings = request.form["windows_input"] 
         building_type = request.form["height_input"]
         #run the actual prediction and get output to pass to template
-        pred = get_prediction(building_type, occupancy_input, number_of_buildings, area_input)
+        pred = get_prediction(building_type, int(occupancy_input), int(number_of_buildings), int(area_input))
         letter_grade = pred[0]
         #save this prediction to the user's predictions
         total_emissions = pred[1][0]
