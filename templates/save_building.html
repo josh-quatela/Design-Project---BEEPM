@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+  <title>Home</title>
+    <body>
+
+    <div class="login_banner"></div>
+    <span class="beepm_title">BEEPM</span>
+    <form method="get" action="/buildings">
+        <button class="buildings_title" type="submit">Buildings</button>
+    </form>
+    <form method="get" action="/home">
+        <button class="home_title" type="submit">Home</button>
+    </form>
+    <form method="get" action="/predictions">
+        <button class="preds_title" type="submit">Predictions</button>
+    </form>
+    <form method="get" action="/logout">
+        <button class="login_title" type="submit">Logout</button>
+    </form>
+    <span class="preds_title">Save Building</span>
+
+    <form method="post">
+        <div class="save_building_text">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <p>ID: {{ build_id }}</p>
+            <p>Area Input: {{ area_input }}</p>
+            <p>Building Type: {{ building_type }}</p>
+            <p>Number of Buildings: {{ number_of_buildings }}</p>
+            <p>Letter Grade: {{ letter_grade }}</p>
+            <p>Total Emissions: {{ total_emissions }}</p>
+            <p>Building Electricity: {{ building_electricity }}</p>
+            <input class="name_input" placeholder="Building Name" type="text" id="building_name" name="building_name"><br>
+        </div>
+        <input class="submit" type="submit" formaction="/save" name="save" onclick="location.href='{{ url_for('save') }}'" value="Save Building">
+    </form>
+
+    </body>
+</html>

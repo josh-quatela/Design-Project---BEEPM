@@ -90,6 +90,19 @@ body {
   text-align: left;
 }
 
+.home_title {
+  width: 200px;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 55px;
+  left: 700px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
+}
+
 .buildings_title {
   width: 200px;
   color: rgba(0,0,0,1);
@@ -413,4 +426,44 @@ table {
   text-align: center;
   border: 1px solid #ccc;
   padding: 10px;
+}
+
+.save_building_text {
+  color: rgba(0,0,0,1);
+  font-family: Hind;
+  top: 500px;
+  font-weight: SemiBold;
+  font-size: 22px;
+  opacity: 1;
+  text-align: center;
+}
+
+.save_title {
+  width: 100%;
+  color: rgba(0,0,0,1);
+  position: absolute;
+  top: 175px;
+  left: 100px;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 55px;
+  opacity: 1;
+  text-align: center;
+}
+
+.name_input {
+  width: 569px;
+  height: 45px;
+  background: rgba(217,217,217,1);
+  opacity: 1;
+  position: absolute;
+  top: 608px;
+  left: 586px;
+  border: 3px solid rgba(0,0,0,1);
+  overflow: hidden;
+  font-family: Hind;
+  font-weight: SemiBold;
+  font-size: 35px;
+  opacity: 1;
+  text-align: left;
 }
