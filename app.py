@@ -131,6 +131,7 @@ def predictions():
                             <td>
                                 <form method="post" action="/save_building">
                                     <input type="hidden" name="id" value="{str(item["_id"])}">
+                                    <input type="hidden" name="occupancy" value="{str(item["occupancy_input"])}">
                                     <input type="hidden" name="area_input" value="{str(item["area_input"])}">
                                     <input type="hidden" name="building_type" value="{str(item["building_type"])}">
                                     <input type="hidden" name="number_of_buildings" value="{str(item["number_of_buildings"])}">
@@ -170,6 +171,7 @@ def buildings():
                                 <td id="total_emissions" name="total_emissions">{str(item["Total GHG Emissions (Metric Tons CO2e)"])}</td>
                                 <td>
                                     <form method="post" action="/edit_building">
+                                        <input type="hidden" name="id" value="{str(item["_id"])}">
                                         <input type="hidden" name="prop_name" value="{str(item["Property Name"])}">
                                         <input type="hidden" name="area_input" value="{str(item["Self-Reported Gross Floor Area (ft²)"])}">
                                         <input type="hidden" name="building_type" value="{str(item["Largest Property Use Type"])}">
@@ -275,13 +277,14 @@ def save_prediction():
 def save():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
     if check_logged:
-        ll84_data.insert_one({"Property Id": session.get('build_id'),
+        ll84_data.insert_one({#"Property Id": session.get('build_id'),
                               "Property Name": request.form["building_name"],
                               "Self-Reported Gross Floor Area (ft²)": session.get("area_input"),
                               "Number of Buildings": session.get("number_of_buildings"),
                               "Largest Property Use Type": session.get("building_type"),
                               "Total GHG Emissions (Metric Tons CO2e)": session.get("total_emissions"),
                               "Electricity Use": session.get("building_electricity"),
+                              "Occupancy": session.get("occupancy"),
                               "email": session.get('email'),
                               "username": session.get('username')
                               })
@@ -295,13 +298,19 @@ def save():
 def edit():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
     if check_logged:
-        prop_name = session["prop_name"]
-        area_input = session["area_input"]
-        building_type = session["building_type"]
-        number_of_buildings = session["number_of_buildings"]
-        total_emissions = session["total_emissions"]
-        # TODO edit the building in the li_84 collection
-
+        id = ObjectId(session["id"])
+        prop_name = request.form["prop_name_input"]
+        area_input = request.form["gross_area_input"]
+        building_type = request.form["prop_use_type_input"]
+        number_of_buildings = request.form["num_of_buildings"]
+        cur_build = ll84_data.find_one({"_id": id})
+        pred = get_prediction(building_type, int(cur_build["Occupancy"]), int(number_of_buildings), int(area_input))
+        letter_grade = pred[0]
+        total_emissions = pred[1][0]
+        building_electricity = pred[1][1]
+        predictions_data.insert_one({"building_type": building_type, "number_of_buildings": number_of_buildings, "area_input": area_input, "letter_grade": letter_grade, "total_emissions": total_emissions, "building_electricity": building_electricity, "occupancy":cur_build["Occupancy"]})
+        ll84_data.insert_one({"email": session.get("email"), "username": session.get("username"), "Occupancy": cur_build["Occupancy"], "Property Name": prop_name, "Largest Property Use Type": building_type, "Number of Buildings": number_of_buildings, "Self-Reported Gross Floor Area (ft²)": area_input, "letter_grade": letter_grade, "Total GHG Emissions (Metric Tons CO2e)": total_emissions, "Electricity Use": building_electricity})
+        ll84_data.delete_one({"_id": id})
         return redirect(url_for("buildings"))
     else:
         return render_template('login_home.html', error="Please login first.")
@@ -326,9 +335,10 @@ def save_building():
         session["letter_grade"] = request.form["letter_grade"]
         session["total_emissions"] = request.form["total_emissions"]
         session["building_electricity"] = request.form["building_electricity"]
+        session["occupancy"] = request.form["occupancy"]
 
         return render_template('save_building.html',
-                               build_id=build_id,
+                               #build_id=build_id,
                                area_input=area_input,
                                building_type=building_type,
                                number_of_buildings=number_of_buildings,
@@ -347,7 +357,8 @@ def edit_building():
         building_type = request.form["building_type"]
         number_of_buildings = request.form["number_of_buildings"]
         total_emissions = request.form["total_emissions"]
-
+        
+        session["id"] = request.form["id"]
         session["prop_name"] = request.form["prop_name"]
         session["area_input"] = request.form["area_input"]
         session["building_type"] = request.form["building_type"]
@@ -369,11 +380,11 @@ def predict():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
     if check_logged:
         area_input = request.form["area_input"]
-        occupancy_input = request.form["occupancy_input"]
+        occupancy = request.form["occupancy"]
         number_of_buildings = request.form["windows_input"] 
         building_type = request.form["height_input"] 
         #run the actual prediction and get output to pass to template
-        pred = get_prediction(building_type, int(occupancy_input), int(number_of_buildings), int(area_input))
+        pred = get_prediction(building_type, int(occupancy), int(number_of_buildings), int(area_input))
         #print(pred)
         letter_grade = pred[0]
         prediction = "This building has a grade of " + letter_grade
