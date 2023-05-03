@@ -120,7 +120,7 @@ def predictions():
 
             #<form method="post" action="{{ url_for('save_building') }}">
 
-            html_data += '''<tr>
+             html_data += f'''<tr>
                             <td id="id" name="id">{str(item["_id"])}</td>
                             <td id="area_input" name="area_input">{str(item["area_input"])}</td>
                             <td id="building_type" name="building_type">{str(item["building_type"])}</td>
