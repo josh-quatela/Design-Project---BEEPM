@@ -19,6 +19,7 @@
         <button class="login_title" type="submit">Logout</button>
     </form>
 
+
     <form method="post">
         <div class="save_building_text">
             <br>
@@ -29,16 +30,17 @@
             <br>
             <br>
             <br>
-            <p>ID: {{ build_id }}</p>
-            <p>Area Input: {{ area_input }}</p>
-            <p>Building Type: {{ building_type }}</p>
+            <p>Property Name: {{ prop_name }}</p>
+            <input class="prop_name_input" placeholder="Building Name" type="text" id="prop_name_input" name="prop_name_input"><br>
+            <p>Self-Reported Gross Floor Area (ft²): {{ area_input }}</p>
+            <input class="gross_area_input" placeholder="Floor Area" type="text" id="gross_area_input" name="gross_area_input"><br>
+            <p>Largest Property Use Type: {{ building_type }}</p>
+            <input class="prop_use_type_input" placeholder="Building Type" type="text" id="prop_use_type_input" name="prop_use_type_input"><br>
             <p>Number of Buildings: {{ number_of_buildings }}</p>
-            <p>Letter Grade: {{ letter_grade }}</p>
-            <p>Total Emissions: {{ total_emissions }}</p>
-            <p>Building Electricity: {{ building_electricity }}</p>
-            <input class="name_input" placeholder="Building Name" type="text" id="building_name" name="building_name"><br>
+            <input class="num_of_build_input" placeholder="Number of Buildings" type="text" id="num_of_buildings" name="num_of_buildings"><br>
+            <p>Total GHG Emissions (Metric Tons CO2e): {{ total_emissions }}</p>
         </div>
-        <input class="submit" type="submit" formaction="/save" name="save" onclick="location.href='{{ url_for('save') }}'" value="Save Building">
+        <input class="submit" type="submit" formaction="/edit" name="edit" onclick="location.href='{{ url_for('edit') }}'" value="Edit Building">
     </form>
 
     </body>

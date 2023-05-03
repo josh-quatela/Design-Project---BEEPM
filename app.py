@@ -162,6 +162,26 @@ def buildings():
         html_data = '<table>'
         html_data += '<tr><th>Property Name</th><th>Gross Floor Area (Sq. Feet)</th><th>Largest Property Use Type</th><th>Number of Buildings</th><th>Total GHG Emissions (Metric Tons CO2e)</th></tr>'
         for item in buildings:
+            html_data += f'''<tr>
+                                <td id="prop_name" name="prop_name">{str(item["Property Name"])}</td>
+                                <td id="area_input" name="area_input">{str(item["Self-Reported Gross Floor Area (ft²)"])}</td>
+                                <td id="building_type" name="building_type">{str(item["Largest Property Use Type"])}</td>
+                                <td id="number_of_buildings" name="number_of_buildings">{str(item["Number of Buildings"])}</td>
+                                <td id="total_emissions" name="total_emissions">{str(item["Total GHG Emissions (Metric Tons CO2e)"])}</td>
+                                <td>
+                                    <form method="post" action="/edit_building">
+                                        <input type="hidden" name="prop_name" value="{str(item["Property Name"])}">
+                                        <input type="hidden" name="area_input" value="{str(item["Self-Reported Gross Floor Area (ft²)"])}">
+                                        <input type="hidden" name="building_type" value="{str(item["Largest Property Use Type"])}">
+                                        <input type="hidden" name="number_of_buildings" value="{str(item["Number of Buildings"])}">
+                                        <input type="hidden" name="total_emissions" value="{str(item["Total GHG Emissions (Metric Tons CO2e)"])}">
+                                        <button type="submit">Edit Building</button>
+                                    </form>
+                                </td>
+                        </tr>'''
+
+
+            '''
             html_data += '<tr>'
             html_data += '<td>' + item["Property Name"] + '</td>'
             html_data += '<td>' + item["Self-Reported Gross Floor Area (ft²)"] + '</td>'
@@ -169,6 +189,8 @@ def buildings():
             html_data += '<td>' + item["Number of Buildings"] + '</td>'
             html_data += '<td>' + item["Total GHG Emissions (Metric Tons CO2e)"] + '</td>'
             html_data += '</tr>'
+            '''
+
         html_data += '</table>'
 
         return render_template("buildings.html", table=html_data)
@@ -232,6 +254,23 @@ def save():
     else:
         return render_template('login_home.html', error="Please login first.")
 
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        prop_name = session["prop_name"]
+        area_input = session["area_input"]
+        building_type = session["building_type"]
+        number_of_buildings = session["number_of_buildings"]
+        total_emissions = session["total_emissions"]
+        # TODO edit the building in the li_84 collection
+
+        return redirect(url_for("buildings"))
+    else:
+        return render_template('login_home.html', error="Please login first.")
+
+
 @app.route('/save_building', methods=['GET', 'POST'])
 def save_building():
     check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
@@ -262,6 +301,32 @@ def save_building():
                                building_electricity=building_electricity)
     else:
         return render_template('login_home.html', error="Please login first.")
+
+@app.route('/edit_building', methods=['GET', 'POST'])
+def edit_building():
+    check_logged = login_data.find_one( {"email" : session.get('email'), "username" : session.get('username')})
+    if check_logged:
+        prop_name = request.form["prop_name"]
+        area_input = request.form["area_input"]
+        building_type = request.form["building_type"]
+        number_of_buildings = request.form["number_of_buildings"]
+        total_emissions = request.form["total_emissions"]
+
+        session["prop_name"] = request.form["prop_name"]
+        session["area_input"] = request.form["area_input"]
+        session["building_type"] = request.form["building_type"]
+        session["number_of_buildings"] = request.form["number_of_buildings"]
+        session["total_emissions"] = request.form["total_emissions"]
+
+        return render_template('edit_building.html',
+                               prop_name=prop_name,
+                               area_input=area_input,
+                               building_type=building_type,
+                               number_of_buildings=number_of_buildings,
+                               total_emissions=total_emissions)
+    else:
+        return render_template('login_home.html', error="Please login first.")
+
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
